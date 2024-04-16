@@ -5,11 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet" />
-        <link href="{{asset('assets/css/style.css')}}" rel="stylesheet" />
+        <title>{{ config('app.name', 'ChatApp') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -20,7 +16,6 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <link rel="stylesheet" href="">
 
     </head>
     <body class="font-sans antialiased">
