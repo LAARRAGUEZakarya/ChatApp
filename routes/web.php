@@ -16,12 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('/');
 
 Route::get('/chatForm', function () {
     return view('chatForm');
-});
-// ->middleware(['auth'])->name('chatForm');
+})->middleware(['auth'])->name('chatForm');
 
 
 require __DIR__.'/auth.php';
