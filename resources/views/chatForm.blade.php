@@ -3,6 +3,7 @@
 
 <div class="container-fluid h-100">
     <form style="float: right;" method="POST" action="{{route('logout')}}">
+        @csrf
         <button class="btn btn-secondery mt-2"><i class="fa-solid fa-right-from-bracket"></i></button>
     </form>
     <div class="row justify-content-center h-100">

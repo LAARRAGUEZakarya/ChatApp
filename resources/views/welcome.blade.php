@@ -23,43 +23,80 @@
             <div class="pages">
 
                 {{-- login section --}}
-            <div class="page">
-                <form method="POST" action="{{route('login')}}">
-                    <div class="input">
-                        <div class="title"><i class="fa-solid fa-user"></i>&nbsp;&nbsp; USERNAME</div>
-                        <input class="text" name="email" type="text" placeholder=""/>
-                    </div>
-                    <div class="input">
-                        <div class="title"><i class="fa-solid fa-lock"></i>&nbsp;&nbsp; PASSWORD</div>
-                        <input class="text" name="password" type="password" placeholder=""/>
-                    </div>
-                    <div class="input">
-                    <input type="submit" value="ENTER"/>
-                    </div>
-                </form>
-            </div>
+                <div class="page">
+                    <form method="POST" action="{{route('login')}}">
+                        @csrf
+                        <div class="input">
+                            <div class="title"><i class="fa-solid fa-user"></i>&nbsp;&nbsp; USERNAME</div>
+                            <input class="text" name="email" type="text" placeholder=""/>
 
-            {{-- signup section --}}
-            <div class="page signup">
-                <form method="POST" action="{{route('register')}}" >
-                    <div class="input">
-                        <div class="title"><i class="fa-solid fa-user"></i>&nbsp;&nbsp; NAME</div>
-                        <input class="text" name="name" type="text" placeholder=""/>
-                    </div>
-                    <div class="input">
-                        <div class="title"><i class="fa-solid fa-envelope"></i>&nbsp;&nbsp; EMAIL</div>
-                        <input class="text" name="email" type="email" placeholder=""/>
-                    </div>
-                    <div class="input">
-                        <div class="title"><i class="fa-solid fa-lock"></i>&nbsp;&nbsp; PASSWORD</div>
-                        <input class="text" type="password" placeholder=""/>
-                    </div>
+                        </div>
 
-                    <div class="input">
-                    <input type="submit" value="SIGN ME UP!"/>
-                    </div>
-                </form>
-            </div>
+                        <div class="input">
+                            <div class="title"><i class="fa-solid fa-lock"></i>&nbsp;&nbsp; PASSWORD</div>
+                            <input class="text" name="password" type="password" placeholder=""/>
+
+
+                        </div>
+                        <div class="input">
+                        <input type="submit" value="ENTER"/>
+                        </div>
+
+                        <div class="input">
+                            @error('email')
+                                    <small style="color:red;">
+                                        <span class="title">{{ $message }}</span>
+                                    </small>
+                            @enderror
+                        </div>
+                    </form>
+                </div>
+
+                {{-- signup section --}}
+                <div class="page signup">
+                    <form method="POST" action="{{route('register')}}" >
+                        @csrf
+                        <div class="input">
+                            <div class="title"><i class="fa-solid fa-user"></i>&nbsp;&nbsp; NAME</div>
+                            <input class="text" name="name" type="text" placeholder=""/>
+                            <div>
+                                @error('name')
+                                    <small style="color:red;">
+                                        <span class="title">{{ $message }}</span>
+                                    </small>
+                                @enderror
+                            </div>
+
+                        </div>
+                        <div class="input">
+                            <div class="title"><i class="fa-solid fa-envelope"></i>&nbsp;&nbsp; EMAIL</div>
+                            <input class="text" name="email" type="email" placeholder=""/>
+                            <div>
+                                @error('email')
+                                        <small style="color:red;">
+                                            <span class="title">{{ $message }}</span>
+                                        </small>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="input">
+                            <div class="title"><i class="fa-solid fa-lock"></i>&nbsp;&nbsp; PASSWORD</div>
+                            <input class="text" name="password" type="password" placeholder=""/>
+                                <div>
+                                    @error('password')
+                                            <small style="color:red;">
+                                                <span class="title">{{ $message }}</span>
+                                            </small>
+                                    @enderror
+                                </div>
+                        </div>
+
+                        <div class="input">
+                        <input type="submit" value="SIGN ME UP!"/>
+                        </div>
+                    </form>
+                </div>
+
             </div>
 
             <div class="tabs">
