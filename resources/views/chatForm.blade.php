@@ -79,7 +79,7 @@
                             <span class="msg_time_send">8:55 AM, Today</span>
                         </div>
                         <div class="img_cont_msg">
-                            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
+                            <img src="{{Auth::user()->image}}" class="rounded-circle user_img_msg">
                         </div>
                     </div>
                 </div>

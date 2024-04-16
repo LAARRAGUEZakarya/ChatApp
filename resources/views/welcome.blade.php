@@ -54,7 +54,7 @@
 
                 {{-- signup section --}}
                 <div class="page signup">
-                    <form method="POST" action="{{route('register')}}" >
+                    <form method="POST" action="{{route('register')}}" enctype="multipart/form-data">
                         @csrf
                         <div class="input">
                             <div class="title"><i class="fa-solid fa-user"></i>&nbsp;&nbsp; NAME</div>
@@ -84,6 +84,17 @@
                             <input class="text" name="password" type="password" placeholder=""/>
                                 <div>
                                     @error('password')
+                                            <small style="color:red;">
+                                                <span class="title">{{ $message }}</span>
+                                            </small>
+                                    @enderror
+                                </div>
+                        </div>
+                        <div class="input">
+                            <div class="title"><i class="fa-solid fa-image"></i>&nbsp;&nbsp; IMAGE</div>
+                            <input name="image" type="file" placeholder=""/>
+                                <div>
+                                    @error('image')
                                             <small style="color:red;">
                                                 <span class="title">{{ $message }}</span>
                                             </small>
