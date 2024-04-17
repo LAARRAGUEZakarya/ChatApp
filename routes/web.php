@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +18,13 @@ Route::get('/', function () {
     return view('welcome');
 })->name('/');
 
-Route::get('/chatForm', function () {
-    return view('chatForm');
-})->middleware(['auth'])->name('chatForm');
 
+
+ Route::middleware(['auth'])->get('chat',function(){
+    return view('chatList');
+ })->name('chatList');
+
+ Route::middleware(['auth'])->get('chatForm/{user_id}', [ChatController::class, 'chatForm'])->name('chatForm');
+ Route::middleware(['auth'])->post('sendMessage', [ChatController::class, 'sendMessage'])->name('sendMessage');
 
 require __DIR__.'/auth.php';

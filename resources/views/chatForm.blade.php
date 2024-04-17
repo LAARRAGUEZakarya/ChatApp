@@ -19,34 +19,54 @@
             </div>
             <div class="card-body contacts_body">
                 <ui class="contacts">
-                    <li class="active">
-                        <div class="d-flex bd-highlight">
-                            <div class="img_cont">
-                                <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
-                                <span class="online_icon"></span>
-                            </div>
-                            <div class="user_info">
-                                <span>Khalid</span>
-                                <p>Kalid is online</p>
-                            </div>
-                        </div>
-                    </li>
+                    @foreach ($users as $user )
+                        @if ($user->id == $receiver->id)
+                            <li class="active">
+                                <a href="{{route('chatForm',$user->id)}}" class="d-flex bd-highlight" style="text-decoration: none;">
+                                    <div class="img_cont">
+                                        <img src="{{asset($receiver->image)}}" class="rounded-circle user_img">
+                                        <span class="online_icon"></span>
+                                    </div>
+                                    <div class="user_info">
+                                        <span>{{$receiver->name}}</span>
+                                        <p>{{$receiver->name}} is online</p>
+                                    </div>
+                                </a>
+                            </li>
+                        @else
+                            <li>
+                                <a href="{{route('chatForm',$user->id)}}" class="d-flex bd-highlight" style="text-decoration: none;">
+                                    <div class="img_cont">
+                                        <img src="{{asset($user->image)}}" class="rounded-circle user_img">
+                                        <span class="online_icon"></span>
+                                    </div>
+                                    <div class="user_info">
+                                        <span>{{$user->name}}</span>
+                                        <p>{{$user->name}} is online</p>
+                                    </div>
+                                </a>
+                            </li>
+                        @endif
+
+                    @endforeach
+
 
                 </ui>
             </div>
             <div class="card-footer"></div>
         </div></div>
+
         <div class="col-md-8 col-xl-6 chat">
             <div class="card">
                 <div class="card-header msg_head">
                     <div class="d-flex bd-highlight">
                         <div class="img_cont">
-                            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+                            <img src="{{asset($receiver->image)}}" class="rounded-circle user_img">
                             <span class="online_icon"></span>
                         </div>
                         <div class="user_info">
-                            <span>Chat with Khalid</span>
-                            <p>1767 Messages</p>
+                            <span>Chat with {{$receiver->name}}</span>
+                            <p>{{$messages->count()}} Messages</p>
                         </div>
                         <div class="video_cam">
                             <span><i class="fas fa-video"></i></span>
@@ -63,34 +83,48 @@
                         </ul>
                     </div>
                 </div>
-                <div class="card-body msg_card_body">
-                    <div class="d-flex justify-content-start mb-4">
-                        <div class="img_cont_msg">
-                            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
-                        </div>
-                        <div class="msg_cotainer">
-                            Hi, how are you samim?
-                            <span class="msg_time">8:40 AM, Today</span>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end mb-4">
-                        <div class="msg_cotainer_send">
-                            Hi Khalid i am good tnx how about you?
-                            <span class="msg_time_send">8:55 AM, Today</span>
-                        </div>
-                        <div class="img_cont_msg">
-                            <img src="{{Auth::user()->image}}" class="rounded-circle user_img_msg">
-                        </div>
-                    </div>
+                <div class="card-body msg_card_body " id="chat_area">
+                    @foreach ($messages as $message)
+                    @php
+                        $messageDate = \Carbon\Carbon::parse($message->created_at);
+                        $formattedTime = $messageDate->isToday() ? $messageDate->format('g:i A, ').'Today' : $messageDate->format('g:i A, l');
+
+                    @endphp
+
+                        @if ($message->receiver_id!=$receiver->id)
+                            <div class="d-flex justify-content-start mb-4" >
+                                <div class="img_cont_msg">
+                                    <img src="{{asset($receiver->image)}}" class="rounded-circle user_img_msg">
+                                </div>
+                                <div class="msg_cotainer">
+                                        {{$message->content}}
+                                        <span class="msg_time">{{$formattedTime}}</span>
+                                </div>
+                            </div>
+                        @else
+                            <div class="d-flex justify-content-end mb-4" >
+                                <div class="msg_cotainer_send">
+                                    {{$message->content}}
+                                    <span class="msg_time_send">{{$formattedTime}}</span>
+                                </div>
+                                <div class="img_cont_msg">
+                                    <img src="{{asset(Auth::user()->image)}}" class="rounded-circle user_img_msg">
+                                </div>
+                            </div>
+                        @endif
+
+                    @endforeach
+
+
                 </div>
                 <div class="card-footer">
                     <div class="input-group">
                         <div class="input-group-append">
                             <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
                         </div>
-                        <textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+                        <textarea name="" id="message" class="form-control type_msg" placeholder="Type your message..."></textarea>
                         <div class="input-group-append">
-                            <span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+                            <button class="input-group-text send_btn" id="send"><i class="fas fa-location-arrow"></i></button>
                         </div>
                     </div>
                 </div>
@@ -101,10 +135,60 @@
 
 <script>
     $(document).ready(function(){
+        $("#chat_area").scrollTop($("#chat_area")[0].scrollHeight);
     $('#action_menu_btn').click(function(){
         $('.action_menu').toggle();
     });
         });
+
+
+    $('#send').click(function(){
+        // Retrieve the CSRF token value from a meta tag
+var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $.post("/sendMessage",
+        {
+            _token: csrfToken, // Include the CSRF token
+            user_id:{{$receiver->id}},
+            message: $("#message").val(),
+        },
+        function(data, status) {
+    // console.log("Data: " + data + "\nStatus: " + status);
+    let senderMessage = `
+        <div class="d-flex justify-content-end mb-4">
+            <div class="msg_cotainer_send">
+                ${$("#message").val()}
+                <span class="msg_time_send">${getCurrentTimeFormatted()}</span>
+            </div>
+            <div class="img_cont_msg">
+                <img src="{{ Auth::user()->image }}" class="rounded-circle user_img_msg">
+            </div>
+        </div>`;
+    $("#chat_area").append(senderMessage);
+    $("#chat_area").scrollTop($("#chat_area")[0].scrollHeight);
+
+    $("#message").val('');
+}
+
+    )
+    })
+
+
+    function getCurrentTimeFormatted() {
+    const currentDate = new Date();
+    let hours = currentDate.getHours();
+    let minutes = currentDate.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert hours to 12-hour format
+    hours = hours % 12;
+    hours = hours ? hours : 12; // '0' should be '12'
+
+    // Pad minutes with leading zero if necessary
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+    return hours + ':' + minutes + ' ' + ampm + ', Today';
+}
+
 </script>
 
 @endsection

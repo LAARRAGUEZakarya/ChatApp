@@ -15,13 +15,8 @@ return new class extends Migration
             $table->id();
             $table->Integer('sender_id');
             $table->Integer('receiver_id');
-            $table->Integer('conversation_id');
             $table->text('content');
             $table->timestamps();
-
-            // $table->foreign('sender_id')->references('id')->on('users');
-            // $table->foreign('receiver_id')->references('id')->on('users');
-            // $table->foreign('conversation_id')->references('id')->on('conversations');
         });
     }
 
