@@ -25,7 +25,7 @@
                         <span class="msg_time_send">${getCurrentTimeFormatted()}</span>
                     </div>
                     <div class="img_cont_msg">
-                        <img src="{{ Auth::user()->image }}" class="rounded-circle user_img_msg">
+                        <img src="{{asset(Auth::user()->image)}}" class="rounded-circle user_img_msg">
                     </div>
                 </div>`;
             $("#chat_area").append(senderMessage);
@@ -64,15 +64,12 @@
 
         var channel = pusher.subscribe('chat'+{{auth()->user()->id}});
             channel.bind('chatMessage', function(data) {
-
-            // Extracting values
-            const image = data.receiver.image;
             const message = data.message;
 
             // Generating HTML with the extracted values
             const receiverMessage = `<div class="d-flex justify-content-start mb-4">
                             <div class="img_cont_msg">
-                                <img src="{{asset('${image}')}}" class="rounded-circle user_img_msg">
+                                <img src="{{asset($receiver->image)}}" class="rounded-circle user_img_msg">
                             </div>
                             <div class="msg_cotainer">
                                 ${message}
